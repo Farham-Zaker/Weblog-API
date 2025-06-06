@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\RegisterUserRequest;
 use App\Repositories\UserRepository;
 use Hash;
 
 class UserController extends Controller
 {
-    public function register(UserRequest $request)
+    public function register(RegisterUserRequest $request)
     {
         // Get validated input data (already validated by UserRequest)
         $data = $request->validated();
@@ -29,7 +29,7 @@ class UserController extends Controller
         ];
 
         $userRepo->createUser($userData);
-        
+
         return response()->json([
             'success' => true,
             'statusCode' => 200,
@@ -37,4 +37,5 @@ class UserController extends Controller
             'data' => $userData
         ]);
     }
+  
 }
