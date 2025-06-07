@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\ApiResponse;
+use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Repositories\UserRepository;
 use Hash;
@@ -37,5 +39,23 @@ class UserController extends Controller
             'data' => $userData
         ]);
     }
-  
+    public function login(LoginUserRequest $request)
+    {
+        $body = $request->validated();
+        $userRepo = new UserRepository();
+
+
+        $user = $userRepo->findOneUser(["email" => $body["email"]]);
+
+        if (!$user)
+            return ApiResponse::error(404, "There is no any user with such email address.");
+
+
+        if (!Hash::check($body["password"], $user["password"]))
+            return ApiResponse::error(401, "Invalid password.");
+
+        $token = $user->createToken("api")->plainTextToken;
+
+        return ApiResponse::success(200, "Login successful", ["token" => $token]);
+    }
 }
