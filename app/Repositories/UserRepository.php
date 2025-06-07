@@ -10,4 +10,8 @@ class UserRepository
     {
         return User::create($data);
     }
+    public function findOneUser($where)
+    {
+        return User::where($where)->first();
+    }
 }
