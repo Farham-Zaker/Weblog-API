@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserRepository
 {
@@ -13,5 +14,16 @@ class UserRepository
     public function findOneUser($where)
     {
         return User::where($where)->first();
+    }
+    public function findUserByToken(string $authToken)
+    {
+        // Remove Bearer from first of token
+        $accessToken = substr($authToken, 7);
+
+        $token = PersonalAccessToken::findToken($accessToken);
+
+        $user = $token->tokenable;
+
+        return $user;
     }
 }
