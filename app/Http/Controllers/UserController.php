@@ -7,6 +7,8 @@ use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Repositories\UserRepository;
 use Hash;
+use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -57,5 +59,18 @@ class UserController extends Controller
         $token = $user->createToken("api")->plainTextToken;
 
         return ApiResponse::success(200, "Login successful", ["token" => $token]);
+    }
+    public function me(Request $request)
+    {
+        $authHeader = $request->header('Authorization');
+
+        // Remove Bearer from first of token
+        $accessToken = substr($authHeader, 7);
+
+        $token = PersonalAccessToken::findToken($accessToken);
+
+        $user = $token->tokenable;
+
+        return ApiResponse::success(200, "User info retrieved successfully", ["userInfo" => $user]);
     }
 }
