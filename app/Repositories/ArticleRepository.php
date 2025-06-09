@@ -14,6 +14,10 @@ class ArticleRepository
     {
         return Article::where("writer_id", $writer_id)->get();
     }
+    public function getAllArticle()
+    {
+        return Article::all();
+    }
     public function getOneArticleById(string $article_id)
     {
         return Article::where("id", $article_id)->first();
