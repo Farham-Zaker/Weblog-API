@@ -22,4 +22,8 @@ class ArticleRepository
     {
         return Article::where("id", $article_id)->first();
     }
+    public function updateArticle(array $where, array $data)
+    {
+        return Article::where($where)->update($data);
+    }
 }
