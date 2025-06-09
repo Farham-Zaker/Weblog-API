@@ -7,10 +7,8 @@ use App\Http\Requests\CreateArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Repositories\ArticleRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\Request as FacadesRequest;
-use Request;
-use Validator;
+use Illuminate\Http\Request;
+
 
 class ArticleController extends Controller
 {
@@ -40,9 +38,9 @@ class ArticleController extends Controller
         $articleRepo = new ArticleRepository();
         $articles = $articleRepo->getAllArticle();
 
-        return ApiResponse::success(200, "Articles retrieved successfully.", [$articles]);
+        return ApiResponse::success(200, "Your articles retrieved successfully.", [$articles]);
     }
-    public function my(HttpRequest $request)
+    public function my(Request $request)
     {
         $token = $request->header("Authorization");
 
@@ -62,7 +60,7 @@ class ArticleController extends Controller
 
         if (!$article) return ApiResponse::error(404, "There is no any article with such article id.");
 
-        return ApiResponse::success(200, "kdfk", [$article]);
+        return ApiResponse::success(200, "Articles retrieved successfully.", [$article]);
     }
     public function update(UpdateArticleRequest $request)
     {
