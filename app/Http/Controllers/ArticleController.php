@@ -34,7 +34,7 @@ class ArticleController extends Controller
 
         return ApiResponse::success(201, "The article successfuly created.", ["article" => $createdArticle]);
     }
-    public function getAll(HttpRequest $request)
+    public function my(HttpRequest $request)
     {
         $token = $request->header("Authorization");
 

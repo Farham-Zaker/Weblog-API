@@ -14,6 +14,6 @@ Route::prefix("auth")->group(function () {
 
 Route::prefix("article")->group(function () {
     Route::middleware(isLogged::class)->post("/create", [ArticleController::class, "create"]);
-    Route::middleware(isLogged::class)->get("/getAll", [ArticleController::class, "getAll"]);
+    Route::middleware(isLogged::class)->get("/my", [ArticleController::class, "my"]);
     Route::get("/get/{article_id}", [ArticleController::class, "getById"]);
 });
