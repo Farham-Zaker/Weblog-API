@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\ApiResponse;
 use App\Http\Requests\CreateArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 use App\Repositories\ArticleRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request as HttpRequest;
@@ -62,5 +63,9 @@ class ArticleController extends Controller
         if (!$article) return ApiResponse::error(404, "There is no any article with such article id.");
 
         return ApiResponse::success(200, "kdfk", [$article]);
+    }
+    public function update(UpdateArticleRequest $request)
+    {
+
     }
 }
