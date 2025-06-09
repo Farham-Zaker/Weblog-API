@@ -6,6 +6,9 @@ use App\Http\Helpers\ApiResponse;
 use App\Http\Requests\CreateArticleRequest;
 use App\Repositories\ArticleRepository;
 use App\Repositories\UserRepository;
+use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+use Request;
 
 class ArticleController extends Controller
 {
@@ -29,5 +32,17 @@ class ArticleController extends Controller
         ]);
 
         return ApiResponse::success(201, "The article successfuly created.", ["article" => $createdArticle]);
+    }
+    public function getAll(HttpRequest $request)
+    {
+        $token = $request->header("Authorization");
+
+        $articleRepo = new ArticleRepository();
+        $userRepo = new UserRepository();
+
+        $user = $userRepo->findUserByToken($token);
+
+        $allArticles = $articleRepo->getAllArticleByWriterId($user->id);
+        return $allArticles;
     }
 }
