@@ -17,5 +17,5 @@ Route::prefix("article")->group(function () {
     Route::middleware(isLogged::class)->get("/my", [ArticleController::class, "my"]);
     Route::get("/public", [ArticleController::class, "public"]);
     Route::get("/get/{article_id}", [ArticleController::class, "getById"]);
-    Route::put("/update");
+    Route::middleware(CheckArticleWriter::class)->put("/update");
 });
