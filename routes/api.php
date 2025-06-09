@@ -4,7 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\isLogged;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
-
+use App\Http\Middleware\CheckArticleWriter;
 
 Route::prefix("auth")->group(function () {
     Route::post("/register", [UserController::class, "register"]);
@@ -17,4 +17,5 @@ Route::prefix("article")->group(function () {
     Route::middleware(isLogged::class)->get("/my", [ArticleController::class, "my"]);
     Route::get("/public", [ArticleController::class, "public"]);
     Route::get("/get/{article_id}", [ArticleController::class, "getById"]);
+    Route::put("/update");
 });
