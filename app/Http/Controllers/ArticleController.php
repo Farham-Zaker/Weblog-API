@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Request;
+use Validator;
 
 class ArticleController extends Controller
 {
@@ -44,5 +45,15 @@ class ArticleController extends Controller
 
         $allArticles = $articleRepo->getAllArticleByWriterId($user->id);
         return $allArticles;
+    }
+    public function getById($article_id)
+    {
+        $articleRepo = new ArticleRepository();
+
+        $article = $articleRepo->getOneArticleById($article_id);
+
+        if (!$article) return ApiResponse::error(404, "There is no any article with such article id.");
+
+        return ApiResponse::success(200, "kdfk", [$article]);
     }
 }
