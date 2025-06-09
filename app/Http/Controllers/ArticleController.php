@@ -12,6 +12,15 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+    protected ArticleRepository $articleRepo;
+    protected UserRepository $userRepo;
+
+    public function __construct(ArticleRepository $articleRepo, UserRepository $userRepo)
+    {
+        $this->articleRepo = $articleRepo;
+        $this->userRepo = $userRepo;
+    }
+
     public function create(CreateArticleRequest $request)
     {
         $token = $request->header("Authorization");
@@ -20,12 +29,9 @@ class ArticleController extends Controller
             "body"  => $body
         ] = $request->validated();
 
-        $articleRepo = new ArticleRepository();
-        $userRepo = new UserRepository();
+        $user = $this->userRepo->findUserByToken($token);
 
-        $user = $userRepo->findUserByToken($token);
-
-        $createdArticle = $articleRepo->createArticle([
+        $createdArticle = $this->articleRepo->createArticle([
             "title" => $title,
             "body"  => $body,
             "writer_id"  => $user["id"]
@@ -35,8 +41,7 @@ class ArticleController extends Controller
     }
     public function public(Request $request)
     {
-        $articleRepo = new ArticleRepository();
-        $articles = $articleRepo->getAllArticle();
+        $articles = $this->articleRepo->getAllArticle();
 
         return ApiResponse::success(200, "Your articles retrieved successfully.", [$articles]);
     }
@@ -44,19 +49,16 @@ class ArticleController extends Controller
     {
         $token = $request->header("Authorization");
 
-        $articleRepo = new ArticleRepository();
-        $userRepo = new UserRepository();
 
-        $user = $userRepo->findUserByToken($token);
+        $user = $this->userRepo->findUserByToken($token);
 
-        $allArticles = $articleRepo->getAllArticleByWriterId($user->id);
+        $allArticles = $this->articleRepo->getAllArticleByWriterId($user->id);
         return $allArticles;
     }
     public function getById($article_id)
     {
-        $articleRepo = new ArticleRepository();
 
-        $article = $articleRepo->getOneArticleById($article_id);
+        $article = $this->articleRepo->getOneArticleById($article_id);
 
         if (!$article) return ApiResponse::error(404, "There is no any article with such article id.");
 
@@ -65,7 +67,6 @@ class ArticleController extends Controller
     public function update(UpdateArticleRequest $request)
     {
         $requestBody = $request->validated();
-        $articleRepo = new ArticleRepository();
 
         // If neither title nor body is provided, return an error response
         if (!isset($requestBody["title"]) && !isset($requestBody["body"])) return ApiResponse::error(400, "No fields were provided for update.");
@@ -77,7 +78,7 @@ class ArticleController extends Controller
         if (isset($requestBody["body"])) $updateFields["body"] = $requestBody["body"];
 
         // Update the article using the provided article_id and updated fields
-        $articleRepo->updateArticle(["id" => $requestBody["article_id"]], $updateFields);
+        $this->articleRepo->updateArticle(["id" => $requestBody["article_id"]], $updateFields);
 
         return ApiResponse::success(200, "Desired article updated successfuly.");
     }
