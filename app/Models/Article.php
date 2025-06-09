@@ -14,7 +14,7 @@ class Article extends Model
     protected $fillable = [
         "title",
         "body",
-        "user_id"
+        "writer_id"
     ];
 
     public function user()
