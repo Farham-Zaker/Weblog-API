@@ -34,6 +34,13 @@ class ArticleController extends Controller
 
         return ApiResponse::success(201, "The article successfuly created.", ["article" => $createdArticle]);
     }
+    public function public(Request $request)
+    {
+        $articleRepo = new ArticleRepository();
+        $articles = $articleRepo->getAllArticle();
+
+        return ApiResponse::success(200, "Articles retrieved successfully.", [$articles]);
+    }
     public function my(HttpRequest $request)
     {
         $token = $request->header("Authorization");
