@@ -66,6 +66,21 @@ class ArticleController extends Controller
     }
     public function update(UpdateArticleRequest $request)
     {
+        $requestBody = $request->validated();
+        $articleRepo = new ArticleRepository();
 
+        // If neither title nor body is provided, return an error response
+        if (!isset($requestBody["title"]) && !isset($requestBody["body"])) return ApiResponse::error(400, "No fields were provided for update.");
+
+        // Prepare only the fields that were actually sent
+        $updateFields = [];
+
+        if (isset($requestBody["title"])) $updateFields["title"] = $requestBody["title"];
+        if (isset($requestBody["body"])) $updateFields["body"] = $requestBody["body"];
+
+        // Update the article using the provided article_id and updated fields
+        $articleRepo->updateArticle(["id" => $requestBody["article_id"]], $updateFields);
+
+        return ApiResponse::success(200, "Desired article updated successfuly.");
     }
 }
