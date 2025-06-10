@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace App\Http\Helpers;
 
 class ApiResponse
@@ -21,12 +21,20 @@ class ApiResponse
             ], $statusCode);
         }
     }
-    public static function error(int $statusCode, string $message)
+    public static function error(int $statusCode, string $message, object | null $errors = null)
     {
+        if ($errors) {
+            return response()->json([
+                "success"     =>   false,
+                "statusCode"  =>   $statusCode,
+                "message"     =>   $message,
+                "errors"      =>   $errors
+            ], $statusCode);
+        }
         return response()->json([
-            "success"     => false,
-            "statusCode"  => $statusCode,
-            "message"     => $message
-        ]);
+            "success"     =>   false,
+            "statusCode"  =>   $statusCode,
+            "message"     =>   $message,
+        ], $statusCode);
     }
 }
