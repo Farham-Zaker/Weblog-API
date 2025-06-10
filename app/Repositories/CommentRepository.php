@@ -10,4 +10,8 @@ class CommentRepository
     {
         return Comment::create($data);
     }
+    public function getById($id)
+    {
+        return Comment::where("id", $id)->first();
+    }
 }
