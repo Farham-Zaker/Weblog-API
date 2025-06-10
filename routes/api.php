@@ -23,5 +23,5 @@ Route::prefix("article")->group(function () {
 
 Route::prefix("comment")->group(function () {
     Route::middleware(isLogged::class)->post("/create", [CommentController::class, "create"]);
-    Route::get("/get/{comment_id}");
+    Route::get("/get/{comment_id}", [CommentController::class, "getById"]);
 });

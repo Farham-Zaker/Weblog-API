@@ -48,4 +48,12 @@ class CommentController extends Controller
 
         return ApiResponse::success(200, "The comment successfuly created.", [$article]);
     }
+    public function getById($comment_id)
+    {
+        $comment = $this->commentRepo->getById($comment_id);
+
+        if (!$comment) return ApiResponse::error(404, "There is no any comment with such ID.");
+
+        return ApiResponse::success(200, "The articles retrieved successfully.",[$comment]);
+    }
 }
