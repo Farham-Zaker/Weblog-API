@@ -58,5 +58,28 @@ class CommentController
     }
     public function update(UpdateCommentRequest $request)
     {
+        $authToken = $request->header("Authorization");
+
+        // Find the currently logged-in user using the token
+        $user = $this->userRepo->findUserByToken($authToken);
+
+        [
+            "comment_id"  =>   $comment_id,
+            "comment"     =>   $newCommentText
+        ] = $request->validated();
+
+
+        $comment = $this->commentRepo->getById($comment_id);
+
+        // Check if the logged-in user is the author of the comment
+        if ($comment->user_id !== $user["id"]) return ApiResponse::error(403, "You are not allowed to update this comment.");
+
+        // Update the comment
+        $this->commentRepo->update(
+            ["id" => $comment_id],
+            ["comment" => $newCommentText]
+        );
+
+        return ApiResponse::success(200, "The comment updated successfully.", ["ds" => $comment]);
     }
 }
