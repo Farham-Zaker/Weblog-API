@@ -25,4 +25,5 @@ Route::prefix("comment")->group(function () {
     Route::middleware(isLogged::class)->post("/create", [CommentController::class, "create"]);
     Route::get("/get/{comment_id}", [CommentController::class, "getById"]);
     Route::middleware(isLogged::class)->put("/update", [CommentController::class, "update"]);
+    Route::middleware(isLogged::class)->delete("/delete/{comment_id}");
 });
