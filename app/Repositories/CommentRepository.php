@@ -14,4 +14,8 @@ class CommentRepository
     {
         return Comment::where("id", $id)->first();
     }
+    public function update(array $where, array $data)
+    {
+        return Comment::where($where)->update($data);
+    }
 }
