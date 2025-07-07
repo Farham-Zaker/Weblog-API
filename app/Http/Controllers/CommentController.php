@@ -8,9 +8,8 @@ use App\Repositories\ArticleRepository;
 use App\Repositories\CommentRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use Validator;
 
-class CommentController extends Controller
+class CommentController 
 {
     protected ArticleRepository $articleRepo;
     protected UserRepository $userRepo;
@@ -40,13 +39,13 @@ class CommentController extends Controller
         // Find logged in user from auth token
         $loggedInUser = $this->userRepo->findUserByToken($authToken);
 
-        $this->commentRepo->create([
+        $createdComment = $this->commentRepo->create([
             "comment"  =>  $comment,
             "article_id"  => $article_id,
             "user_id" => $loggedInUser["id"]
         ]);
 
-        return ApiResponse::success(200, "The comment successfuly created.", [$article]);
+        return ApiResponse::success(200, "The comment successfuly created.", [$createdComment]);
     }
     public function getById($comment_id)
     {
