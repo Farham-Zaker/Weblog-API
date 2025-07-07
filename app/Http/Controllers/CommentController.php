@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\ApiResponse;
 use App\Http\Requests\CreateCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Repositories\ArticleRepository;
 use App\Repositories\CommentRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
-class CommentController 
+class CommentController
 {
     protected ArticleRepository $articleRepo;
     protected UserRepository $userRepo;
@@ -53,6 +54,9 @@ class CommentController
 
         if (!$comment) return ApiResponse::error(404, "There is no any comment with such ID.");
 
-        return ApiResponse::success(200, "The articles retrieved successfully.",[$comment]);
+        return ApiResponse::success(200, "The articles retrieved successfully.", [$comment]);
+    }
+    public function update(UpdateCommentRequest $request)
+    {
     }
 }
