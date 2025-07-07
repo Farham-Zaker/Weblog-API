@@ -19,17 +19,12 @@ class isLogged
     {
         $authHeader = $request->header('Authorization');
 
-        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
-            return ApiResponse::error(401, "Token not provided.");
-        }
-        // Remove Bearer from first of token
-        $accessToken = substr($authHeader, 7);
+        if (!$authHeader) return ApiResponse::error(401, "Token not provided.");
 
-        $token = PersonalAccessToken::findToken($accessToken);
+        $token = PersonalAccessToken::findToken($authHeader);
 
-        if (!$token || !$token->tokenable) {
-            return ApiResponse::error(401, "Invalid or expired token.");
-        }
+        if (!$token || !$token->tokenable) return ApiResponse::error(401, "Invalid or expired token.");
+
 
         return $next($request);
     }
