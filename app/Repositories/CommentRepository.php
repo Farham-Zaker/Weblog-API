@@ -18,4 +18,8 @@ class CommentRepository
     {
         return Comment::where($where)->update($data);
     }
+    public function delete($id)
+    {
+        return Comment::where("id", $id)->delete();
+    }
 }
