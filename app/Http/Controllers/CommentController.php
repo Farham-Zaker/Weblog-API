@@ -82,4 +82,21 @@ class CommentController
 
         return ApiResponse::success(200, "The comment updated successfully.", ["ds" => $comment]);
     }
+    public function delete($comment_id, Request $request)
+    {
+        $authToken = $request->header("Authorization");
+
+        // Find the currently logged-in user using the token
+        $user = $this->userRepo->findUserByToken($authToken);
+
+        $comment = $this->commentRepo->getById($comment_id);
+        if (!$comment) return ApiResponse::error(404, "There is no any comment with such ID.");
+
+        // Check if the logged-in user is the author of the comment
+        if ($comment->user_id !== $user["id"]) return ApiResponse::error(403, "You are not allowed to delete this comment.");
+
+        $this->commentRepo->delete($comment_id);
+
+        return ApiResponse::success(200, "The comment deleted successfully.");
+    }
 }
