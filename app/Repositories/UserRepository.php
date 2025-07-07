@@ -17,10 +17,7 @@ class UserRepository
     }
     public function findUserByToken(string $authToken)
     {
-        // Remove Bearer from first of token
-        $accessToken = substr($authToken, 7);
-
-        $token = PersonalAccessToken::findToken($accessToken);
+        $token = PersonalAccessToken::findToken($authToken);
 
         $user = $token->tokenable;
 
