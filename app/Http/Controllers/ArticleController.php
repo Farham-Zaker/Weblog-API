@@ -99,4 +99,17 @@ class ArticleController extends Controller
 
         return ApiResponse::success(200, "Desired article updated successfuly.");
     }
+    public function delete($article_id) {
+        // Check if the article exists
+        $article = $this->articleRepo->getOneArticleById($article_id);
+        if (!$article) return ApiResponse::error(404, "There is no any article with such article id.");
+
+        // Delete all comments associated with the article
+        $this->commentRepo->deleteAll(["article_id" => $article_id]);
+
+        // Delete the article
+        $this->articleRepo->deleteById($article_id);
+
+        return ApiResponse::success(200, "The article deleted successfully.");
+    }
 }

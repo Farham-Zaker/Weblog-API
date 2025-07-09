@@ -20,7 +20,7 @@ Route::prefix("article")->group(function () {
     Route::get("/get/{article_id}", [ArticleController::class, "getById"]);
     Route::middleware(isLogged::class)->get("/get/{article_id}/comments", [ArticleController::class, "getComments"]);
     Route::middleware(CheckArticleWriter::class)->put("/update", [ArticleController::class, "update"]);
-    Route::middleware(isLogged::class, CheckArticleWriter::class)->delete("/delete/{article_id}");
+    Route::middleware(isLogged::class, CheckArticleWriter::class)->delete("/delete/{article_id}", [ArticleController::class, "delete"]);
 });
 
 Route::prefix("comment")->group(function () {
