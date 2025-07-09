@@ -26,4 +26,8 @@ class CommentRepository
     {
         return Comment::where("id", $id)->delete();
     }
+    public function deleteAll(array $where)
+    {
+        return Comment::where($where)->delete();
+    }
 }
