@@ -26,4 +26,8 @@ class ArticleRepository
     {
         return Article::where($where)->update($data);
     }
+    public function deleteById(string $article_id)
+    {
+        return Article::where("id", $article_id)->delete();
+    }
 }
