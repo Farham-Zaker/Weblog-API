@@ -4,7 +4,7 @@ namespace App\Http\Helpers;
 
 class ApiResponse
 {
-    public static function success(int $statusCode, string $message = "Success", array $data = [])
+    public static function success(int $statusCode, string $message = "Success", array | object $data = [])
     {
         if (count($data) == 0) {
             return response()->json([
