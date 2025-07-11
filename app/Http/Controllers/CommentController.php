@@ -48,6 +48,16 @@ class CommentController
 
         return ApiResponse::success(200, "The comment successfuly created.", [$createdComment]);
     }
+    public function getAllByArticleId($article_id)
+    {
+        $article = $this->articleRepo->getOneArticleById($article_id);
+
+        if (!$article) return ApiResponse::error(404, "There is no any article with such ID.");
+
+        $articleComments = $this->commentRepo->getAll(["article_id" => $article_id]);
+
+        return ApiResponse::success(200, "The comments retrieved successfully.", $articleComments);
+    }
     public function getById($comment_id)
     {
         $comment = $this->commentRepo->getById($comment_id);
