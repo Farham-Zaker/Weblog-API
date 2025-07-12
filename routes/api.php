@@ -21,7 +21,7 @@ Route::prefix("article")->group(function () {
     Route::middleware(isLogged::class)->get("/get/{article_id}/comments", [ArticleController::class, "getComments"]);
     Route::middleware(isLogged::class, CheckArticleWriter::class)->put("/update", [ArticleController::class, "update"]);
     Route::middleware(isLogged::class, CheckArticleWriter::class)->delete("/delete/{article_id}", [ArticleController::class, "delete"]);
-    Route::get("/pdf/{article_id}");
+    Route::get("/pdf/{article_id}", [ArticleController::class, "exportPdf"]);
 });
 
 Route::prefix("comment")->group(function () {

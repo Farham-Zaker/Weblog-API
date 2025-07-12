@@ -9,7 +9,7 @@ use App\Repositories\ArticleRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\CommentRepository;
 use Illuminate\Http\Request;
-
+use Barryvdh\DomPDF\PDF;
 
 class ArticleController extends Controller
 {
@@ -77,7 +77,7 @@ class ArticleController extends Controller
         $comments = $this->commentRepo->getAll(["article_id" => $article_id]);
 
         // If there are no comments, return an error response
-        if(count($comments) === 0) return ApiResponse::error(404, "There is no any comment for this article.");
+        if (count($comments) === 0) return ApiResponse::error(404, "There is no any comment for this article.");
 
         return ApiResponse::success(200, "Comments retrieved successfully.", [$comments]);
     }
@@ -99,7 +99,8 @@ class ArticleController extends Controller
 
         return ApiResponse::success(200, "Desired article updated successfuly.");
     }
-    public function delete($article_id) {
+    public function delete($article_id)
+    {
         // Check if the article exists
         $article = $this->articleRepo->getOneArticleById($article_id);
         if (!$article) return ApiResponse::error(404, "There is no any article with such article id.");
@@ -111,5 +112,26 @@ class ArticleController extends Controller
         $this->articleRepo->deleteById($article_id);
 
         return ApiResponse::success(200, "The article deleted successfully.");
+    }
+    public function exportPdf($article_id)
+    {
+        $article = $this->articleRepo->getOneArticleById($article_id);
+
+        if (!$article) return ApiResponse::error(404, "There is no any article with such article id.");
+
+        $author = $this->userRepo->findOneUser(["id" => $article->writer_id]);
+
+        $pdfData = [
+            'author' => $author->username,
+            'title' => $article->title,
+            'body' => $article->body,
+            'date' => $article->created_at->format("Y/m/d")
+        ];
+
+        $pdfService = app()->make(\Barryvdh\DomPDF\PDF::class);
+
+        $pdf = $pdfService->loadView('article', ["data" => $pdfData]);
+
+        return  $pdf->download("article_$article->id.pdf");
     }
 }
