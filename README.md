@@ -23,9 +23,9 @@ This is a simple blog backend project built with Laravel. It provides RESTful AP
 
 #### Body Parameters
 
-- **username**: A required string that must be at least 5 characters and no more than 255 characters. The username must be unique.
-- **email**: A required and valid email address that must not already be registered.
-- **password**: A required string with a minimum length of 6 characters.
+- `username` *(string, required)* – Unique, 5–255 characters  
+- `email` *(string, required)* – Valid and unique  
+- `password` *(string, required)* – Minimum 6 characters  
 
 #### Example Request
 
