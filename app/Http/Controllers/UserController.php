@@ -63,14 +63,9 @@ class UserController extends Controller
     }
     public function me(Request $request)
     {
-        $authHeader = $request->header('Authorization');
+        $authToken = $request->header('Authorization');
 
-        // Remove Bearer from first of token
-        $accessToken = substr($authHeader, 7);
-
-        $token = PersonalAccessToken::findToken($accessToken);
-
-        $user = $token->tokenable;
+        $user = $this->userRepo->findUserByToken($authToken);
 
         return ApiResponse::success(200, "User info retrieved successfully", ["userInfo" => $user]);
     }
