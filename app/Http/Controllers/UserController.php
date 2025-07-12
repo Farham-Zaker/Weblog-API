@@ -12,13 +12,16 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    protected UserRepository $userRepo;
+    public function __construct(UserRepository $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
+
     public function register(RegisterUserRequest $request)
     {
         // Get validated input data (already validated by UserRequest)
         $data = $request->validated();
-
-        // Initialize UserRepository for user operations
-        $userRepo = new UserRepository();
 
         // Get client IP address
         $client_ip = $request->getClientIp();
@@ -32,7 +35,7 @@ class UserController extends Controller
             "last_ip" => $client_ip
         ];
 
-        $userRepo->createUser($userData);
+        $this->userRepo->createUser($userData);
 
         return response()->json([
             'success' => true,
@@ -44,10 +47,8 @@ class UserController extends Controller
     public function login(LoginUserRequest $request)
     {
         $body = $request->validated();
-        $userRepo = new UserRepository();
 
-
-        $user = $userRepo->findOneUser(["email" => $body["email"]]);
+        $user = $this->userRepo->findOneUser(["email" => $body["email"]]);
 
         if (!$user)
             return ApiResponse::error(404, "There is no any user with such email address.");
